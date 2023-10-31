@@ -3,29 +3,6 @@ import fs from 'fs';
 
 const browser = await puppeteer.launch({ headless: false, defaultViewport: null, args: ['--start-maximized'] });
 
-// const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-// const AnonymizeUAPlugin = require('puppeteer-extra-plugin-anonymize-ua');
-
-// puppeteer.use(StealthPlugin());
-// puppeteer.use(AnonymizeUAPlugin());
-
-// (async () => {
-//   const browser = await puppeteer.launch({ headless: false });
-//   const page = await browser.newPage();
-
-//   await page.goto('https://provideraccess.dentaquest.com/');
-//   // ... your login code here
-
-//   // Store the session
-// //   const session = await page.cookies();
-
-//   // Save the session to a file or database
-//   // Example: Save to a file
-// //   const fs = require('fs');
-// //   fs.writeFileSync('session.json', JSON.stringify(session, null, 2));
-
-//   await browser.close();
-// })();
 const loginAndStoreSession = async (page) => {
     const userNameInputSelector = "input[name='USER']"
     const passwordInputSelector = "input[name='PASSWORD']"
@@ -45,6 +22,7 @@ const loginAndStoreSession = async (page) => {
     } catch (err) {
         console.error(err);
     }
+    await browser.close()
 }
 const useSession = async (page) => {
     const sessionData = fs.readFileSync('session.json');
@@ -59,7 +37,7 @@ const initialize = async () => {
     await page.evaluate(() => document.body.style.width = '100%');
     await page.goto('https://provideraccess.dentaquest.com/');
 
-    // await loginAndStoreSession(page); 
+    // await loginAndStoreSession(page);
     await useSession(page);
     // const session = await page.cookies();
     console.log("======= Scrapping Finished =======")

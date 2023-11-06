@@ -15,7 +15,7 @@ const initialize = async () => {
         );
         const emailInputSelector = 'input[type="email"]';
         await page.waitForSelector(emailInputSelector);
-        await page.type(emailInputSelector, 'telltokichu');
+        await page.type(emailInputSelector, 'telltokichuu');
         await page.screenshot({
             path: 'screenshot.jpg'
         });
@@ -29,13 +29,21 @@ const initialize = async () => {
 const checkSession = async () => {
     try {
         const browser = await puppeteer.connect({
-            "browserWSEndpoint": "ws://0.0.0.0:3000/devtools/browser/460e062b-5852-4f06-9614-a38ba6891d26"
+            "browserWSEndpoint": "ws://0.0.0.0:3000/devtools/browser/f5c21034-14dd-424b-8f74-915166399f95"
         });
         const pages = await browser.pages();
-        pages.map((page) => {
-            console.log('page: ', page);
-
-        })
+        for (let i = 0; i < pages.length; i++) {
+            if (pages[i].url().includes('accounts.google.com')) {
+                await pages[i].bringToFront();
+                const emailInputSelector = 'input[type="email"]';
+                await pages[i].waitForSelector(emailInputSelector);
+                await pages[i].type(emailInputSelector, 'telltokichuui');
+                await pages[i].screenshot({
+                    path: 'screenshot-check.jpg'
+                });
+            }
+        }
+        // pages[1].bringToFront();
         // const page = await browser.newPage();
         // await page.goto(
         //     "https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Faccounts.google.com%2F&followup=https%3A%2F%2Faccounts.google.com%2F&ifkv=AVQVeyxxvTvqDCiIGC3rNzmzOC0sa_eJGM9rfyZT5gIjAs4Z1BA6UbAB-5gHxMmOJ04iVD60Qj8rwQ&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S687925151%3A1698923301279918&theme=glif"
